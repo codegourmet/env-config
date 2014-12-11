@@ -40,6 +40,13 @@ class EnvConfigTest < MiniTest::Test
     assert_equal 'default default_test_setting', config[:default_test_setting]
   end
 
+  def test_raises_if_config_key_not_set_in_at_least_default
+    config = EnvConfig.new('test')
+    assert_raises EnvConfig::ArgumentError do
+      config[:unknown_test_setting_12345]
+    end
+  end
+
   def test_environment_specific_setting_overrides_default
     EnvConfig.configure(:test2) do |config|
       config[:default_test_setting] = 'overwritten default_test_setting'
