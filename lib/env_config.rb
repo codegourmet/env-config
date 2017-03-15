@@ -56,7 +56,13 @@ class EnvConfig
   def initialize(environment)
     @environment = environment.to_sym
     raise AbstractError if @environment == :default
-    raise UnknownEnvironmentError if !@@configurations.has_key?(@environment)
+
+    if !@@configurations.has_key?(@environment)
+      raise UnknownEnvironmentError.new(
+        "unknown environment '#{@environment}'." +
+        " available: #{@@configurations.keys}"
+      )
+    end
   end
 
   def [](key)
